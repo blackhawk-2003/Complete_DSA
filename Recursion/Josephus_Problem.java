@@ -8,6 +8,6 @@ public class Josephus_Problem {
     }
 
     public static void main(String[] args) {
-        System.out.println(josephus(5, 3));
+        System.out.println(josephus(3, 2));
     }
 }
