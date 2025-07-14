@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radon Password Generator</title>
+    <style>
+      body {
+        background: linear-gradient(135deg, #232526, #414345);
+        min-height: 100vh;
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        background: rgba(34, 40, 49, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        padding: 40px 30px;
+        display: flex;
+        gap: 40px;
+      }
+      .generator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        min-width: 300px;
+      }
+      .password-box {
+        background: #393e46;
+        border-radius: 10px;
+        padding: 18px 24px;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        min-width: 220px;
+        text-align: center;
+        word-break: break-all;
+      }
+      .btn {
+        background: linear-gradient(90deg, #00adb5, #00ffb8);
+        color: #232526;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s;
+        margin: 0 5px;
+      }
+      .btn:hover {
+        background: linear-gradient(90deg, #00ffb8, #00adb5);
+        transform: translateY(-2px) scale(1.05);
+      }
+      .saved {
+        min-width: 220px;
+        background: #232931;
+        border-radius: 12px;
+        padding: 20px 18px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+      .saved-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 12px;
+        color: #00adb5;
+        letter-spacing: 1px;
+      }
+      .saved-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .saved-list li {
+        background: #393e46;
+        border-radius: 6px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        font-size: 1.1rem;
+        word-break: break-all;
+        transition: background 0.2s;
+      }
+      .saved-list li:last-child {
+        margin-bottom: 0;
+      }
+      @media (max-width: 700px) {
+        .container {
+          flex-direction: column;
+          align-items: center;
+          gap: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="generator">
+        <div class="password-box" id="passwordBox">Click Generate</div>
+        <div>
+          <button class="btn" onclick="generatePassword()">
+            Generate Password
+          </button>
+          <button class="btn" onclick="copyPassword()">Copy</button>
+          <button class="btn" onclick="savePassword()">Save</button>
+        </div>
+      </div>
+      <div class="saved">
+        <div class="saved-title">Saved Passwords</div>
+        <ul class="saved-list" id="savedList">
+          <!-- Saved passwords will appear here -->
+        </ul>
+      </div>
+    </div>
+    <script>
+      function generatePassword() {
+        const length = 14;
+        const charset =
+          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=<>?";
+        let password = "";
+        for (let i = 0, n = charset.length; i < length; ++i) {
+          password += charset.charAt(Math.floor(Math.random() * n));
+        }
+        document.getElementById("passwordBox").textContent = password;
+      }
+
+      function copyPassword() {
+        const password = document.getElementById("passwordBox").textContent;
+        if (password && password !== "Click Generate") {
+          navigator.clipboard.writeText(password).then(() => {
+            showToast("Copied to clipboard!");
+          });
+        }
+      }
+
+      function savePassword() {
+        const password = document.getElementById("passwordBox").textContent;
+        if (password && password !== "Click Generate") {
+          const savedList = document.getElementById("savedList");
+          const li = document.createElement("li");
+          li.textContent = password;
+          savedList.insertBefore(li, savedList.firstChild);
+        }
+      }
+
+      function showToast(message) {
+        let toast = document.createElement("div");
+        toast.textContent = message;
+        toast.style.position = "fixed";
+        toast.style.bottom = "40px";
+        toast.style.left = "50%";
+        toast.style.transform = "translateX(-50%)";
+        toast.style.background = "#00adb5";
+        toast.style.color = "#232526";
+        toast.style.padding = "14px 28px";
+        toast.style.borderRadius = "8px";
+        toast.style.fontWeight = "bold";
+        toast.style.fontSize = "1rem";
+        toast.style.boxShadow = "0 2px 8px rgba(0,0,0,0.18)";
+        toast.style.zIndex = 9999;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+          toast.style.transition = "opacity 0.5s";
+          toast.style.opacity = "0";
+          setTimeout(() => document.body.removeChild(toast), 500);
+        }, 1200);
+      }
+    </script>
+  </body>
+</html>
